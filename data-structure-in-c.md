@@ -1,12 +1,8 @@
----
 title: 数据结构笔记
-tags:
-  - C
-  - Data Structure
-categories: GEE
 date: 2023-09-27 18:07:21
----
-
+mdate: 2023-10-09 14:23:25
+categories: GEE
+tags: 
 
 > 参考书籍：数据结构与算法分析（C语言描述） 原书第二版
 
@@ -164,5 +160,7 @@ typedef PtrToNode Position;
 List MakeEmpty(List L);
 int IsEmpty(List L);
 int IsLast(Position P, List L);
-Position Find(ElementType X)
+Position Find(ElementType X);
+void Delete(ElementType X, List L);
 ```
+
