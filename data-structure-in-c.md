@@ -1,6 +1,6 @@
 title: 数据结构笔记
 date: 2023-09-27 18:07:21
-mdate: 2023-10-09 14:25:25
+mdate: 2023-10-09 14:27:05
 categories: GEE
 tags: 
 
@@ -168,5 +168,7 @@ void Delete(ElementType X, List L);
 
 ### 二叉树
 
-二叉树的一个性质是**平均二叉树的深度要比 N 小的多**
+二叉树的一个性质是**平均二叉树的深度要比 N 小的多**，这个平均深度为**O(根号 N)**；对于二叉查找树（binary search tree），深度的平均值为**O(log N)**。
+
+
 
