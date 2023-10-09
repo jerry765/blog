@@ -1,6 +1,6 @@
 title: 数据结构笔记
 date: 2023-09-27 18:07:21
-mdate: 2023-10-09 14:23:25
+mdate: 2023-10-09 14:25:25
 categories: GEE
 tags: 
 
@@ -163,4 +163,10 @@ int IsLast(Position P, List L);
 Position Find(ElementType X);
 void Delete(ElementType X, List L);
 ```
+
+## 第 4 章 树
+
+### 二叉树
+
+二叉树的一个性质是**平均二叉树的深度要比 N 小的多**
 
