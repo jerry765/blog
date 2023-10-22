@@ -1,6 +1,11 @@
+---
 title: 计算机网络笔记
+tags:
+  - C
+  - computer network
+categories: GEE
 date: 2023-10-08 19:42
-mdate: 2023-10-20 11:35:22
+---
 
 >  参考书籍：计算机网络——自顶向下方法（原书第 8 版）
 
