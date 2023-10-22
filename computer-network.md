@@ -9,6 +9,8 @@ tags:
 
 >  参考书籍：计算机网络——自顶向下方法（原书第 8 版）
 
+<!-- more -->
+
 ##  第 1 章 计算机网络和因特网
 
 端系统（end system）通过通信链路（communication link）和分组交换机（packet switch）的网络连接到一起。

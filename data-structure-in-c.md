@@ -20,7 +20,7 @@ tags:
 - **设计法则**：假设所有的递归调用都能运行
 - **合成效益法则**（compound interest rule）：在求解一个问题的同一实例时，切勿在不同的递归调用中做重复性的工作
 
-## 第2章 算法分析
+## 第 2 章 算法分析
 
 > 计算任何事情不要超过一次
 
@@ -286,13 +286,145 @@ void DeleteList(List L) {
 
 插入一个节点可能破坏 AVL 树的特性，通过旋转进行修正。高度不平衡时，必须重新平衡的节点的两棵子树的高度差 2 。
 
-#### 单旋转
+#### 旋转
 
+把树形象地看成柔软灵活的，重力作用。
+除旋转引起的局部变化外，树的其余部分必须知晓该变化。
 
+#### 代码
 
+递归地将 X 插入到了 T 的相应的子树中。如果子树的高度不变，那么插入完成。否则，如果 T 中出现了高度不平衡，那么我们根据 X 以及 T 和子树中的关键字做适当的单旋转或双旋转，更新这些高度（并解决好与树的其余部分的连接），从而完成插入。
 
+<!-- TODO：寻找满意的旋转图 -->
 
+``` C
+# ifdef _AVLTree_H
 
+struct AvlNode;
+typedef struct AvlNode *Position;
+typedef struct AvlNode *AvlTree;    // AVL树
+
+AvlTree MakeEmpty(AvlTree T);
+Position Find(ElementType X, AvlTree T);
+Position FindMin(AvlTree T);
+Position FindMax(AvlTree T);
+AvlTree Insert(ElementType X, AvlTree T);
+AvlTree Delete(ElementType X, AvlTree T);
+ElementType Retrieve(Position P);
+
+# endif /* _AVLTree_H */
+
+// Place in the implementation file
+struct AvlNode
+{
+    ElementType Element;
+    AvlTree Left;
+    AvlTree Right;
+    int Height;
+};
+
+static int Height(Position P)
+{
+    if (P == NULL)
+        return -1;
+    else
+        return P->Height;
+}
+
+AvlTree Insert(ElementType X, AvlTree T)
+{
+    if (T == NULL)
+    {
+        // Create and return a one-node tree
+        T = malloc(sizeof(struct AvlNode));
+        if (T == NULL)
+            FatalError("Out of space!!!");
+        else
+        {
+            T->Element = X;
+            T->Height = 0;
+            T->Left = T->Right = NULL;
+        }
+    }
+    else if (X < T->Element)
+    {
+        T->Left = Insert(X, T->Left);
+        if (Height(T->Left) - Height(T->Right) == 2)
+            if (X < T->Left->Element)
+                T = SingleRotateWithLeft(T);
+            else
+                T = DoubleRotateWithLeft(T);
+    }
+    else if (X > T->Element)
+    {
+        T->Right = Insert(X, T->Right);
+        if (Height(T->Right) - Height(T->Left) == 2)
+            if (X > T->Right->Element)
+                T = SingleRotateWithRight(T);
+            else
+                T = DoubleRotateWithRight(T);
+    }
+    // Else X is in the tree already; we'll do nothing
+
+    T->Height = Max(Height(T->Left), Height(T->Right)) + 1;
+    return T;
+}
+
+static Position SingleRotateWithLeft(Position K2)
+{
+    Position K1;
+
+    K1 = K2->Left;
+    K2->Left = K1->Right;
+    K1->Right = K2;
+
+    K2->Height = Max(Height(K2->Left), Height(K2->Right)) + 1;
+    K1->Height = Max(Height(K1->Left), K2->Height) + 1;
+
+    return K1;  // New root
+}
+
+static Position SingleRotateWithRight(Position K1)
+{
+    Position K2;
+
+    K2 = K1->Right;
+    K1->Right = K2->Left;
+    K2->Left = K1;
+
+    K1->Height = Max(Height(K1->Left), Height(K1->Right)) + 1;
+    K2->Height = Max(Height(K2->Right), K1->Height) + 1;
+
+    return K2;  // New root
+}
+
+static Position DoubleRotateWithLeft(Position K3)
+{
+    // Rotate between K1 and K2
+    K3->Left = SingleRotateWithRight(K3->Left);
+
+    // Rotate between K3 and K2
+    return SingleRotateWithLeft(K3);
+}
+
+static Position DoubleRotateWithRight(Position K1)
+{
+    // Rotate between K3 and K2
+    K1->Right = SingleRotateWithLeft(K1->Right);
+
+    // Rotate between K1 and K2
+    return SingleRotateWithRight(K1);
+}
+```
+
+### 伸展树
+
+伸展树（splay tree）保证从空树开始连续 M 次对树的操作最多花费`O(M log N)`时间，并不保证任意一次操作花费 O（N） 时间的可能。*不存在坏的输入序列*。
+*当 M 次操作的序列总的最坏情形运行时间为 O(MF(N)) 时，我们就说它的摊还（amortized）运行时间为 O(F(N))。*一颗伸展树每次操作的摊还代价为 `O(log N)`。
+伸展树是基于这样的事实：对于二叉查找树来说，每次操作最坏情形时间 O(N) 并不坏，只要它相对不常发生就行。累积的运行时间很重要。
+*只要有一个节点被访问，它就必须被移动。当一个节点被访问后，它就要经过一系列的 AVL 树的旋转后放到根上。*
+
+伸展树不要求保留高度或平衡信息，因此它在某种程度上节省空间并简化代码。
 
 
 
