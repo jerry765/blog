@@ -1,6 +1,6 @@
 title: high performance javascript
 date: 2023-11-13 15:04:11
-mdate: 2023-11-13 15:07:22
+mdate: 2023-11-13 15:09:32
 doc_id: a6c6a56af06247d9b0f520d8c092cd71
 
 优化`JavaScript`规则：
@@ -20,6 +20,13 @@ function loadScript(url, callback) {
                 callback()
             }
         }
+    } else {
+        script.onload = function() {  // other browsers
+            callback()
+        }    
     }
+
+    script.scr = url
+    document
 }
 ```
